@@ -15,6 +15,4 @@ jobs:
       - name: install dependencies
         run: yarn install
       - name: build
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: yarn make
