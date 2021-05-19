@@ -50,7 +50,8 @@
               "owner": "joeflateau",
               "name": "test-electron"
             },
-            "prerelease": true
+            "prerelease": true,
+            "draft": true
           }
         }
       ],
