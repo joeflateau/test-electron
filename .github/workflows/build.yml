@@ -16,6 +16,11 @@ jobs:
         run: yarn install
       - name: decode macos cert
         run: ./scripts/decode-macos-cert.sh
+          MACOS_CERT_P12: ${{ secrets.MACOS_CERT_P12 }}
         if: matrix.os == 'macOS-latest'
       - name: build
         run: yarn make
+        env:
+          MACOS_SIGN_IDENTITY: ${{ secrets.MACOS_SIGN_IDENTITY }}
+          APP_STORE_CONNECT_ID: ${{ secrets.APP_STORE_CONNECT_ID }}
+          APP_STORE_CONNECT_PASSWORD: ${{ secrets.APP_STORE_CONNECT_PASSWORD }}
