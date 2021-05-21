@@ -21,5 +21,6 @@ jobs:
         run: yarn install
       - name: build
         run: yarn make
+        env:
           APP_STORE_CONNECT_ID: ${{ secrets.APP_STORE_CONNECT_ID }}
           APP_STORE_CONNECT_PASSWORD: ${{ secrets.APP_STORE_CONNECT_PASSWORD }}
