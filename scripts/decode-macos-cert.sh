@@ -23,9 +23,9 @@ security unlock-keychain -p password $KEYCHAIN
 # Add certificates to keychain and allow codesign to access them
 
 # 1) Apple Worldwide Developer Relations Certification Authority
-security import ./assets/certs/apple.cer -k ~/Library/Keychains/$KEYCHAIN -T /usr/bin/codesign
+security import ./assets/certs/AppleWWDRCAG3.cer -k ~/Library/Keychains/$KEYCHAIN -T /usr/bin/codesign
 # 2) Developer Authentication Certification Authority
-security import ./assets/certs/dac.cer -k ~/Library/Keychains/$KEYCHAIN -T /usr/bin/codesign
+security import ./assets/certs/DevAuthCA.cer -k ~/Library/Keychains/$KEYCHAIN -T /usr/bin/codesign
 # 3) Developer ID (That's you!)
 security import $CERTIFICATE_P12 -k $KEYCHAIN -P $MACOS_CERT_PASSWORD -T /usr/bin/codesign 2>&1 >/dev/null
 
