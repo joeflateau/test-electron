@@ -27,7 +27,7 @@ security import ./assets/certs/AppleWWDRCAG3.cer -k ~/Library/Keychains/$KEYCHAI
 # 2) Developer Authentication Certification Authority
 security import ./assets/certs/DevAuthCA.cer -k ~/Library/Keychains/$KEYCHAIN -T /usr/bin/codesign
 # 3) Developer ID (That's you!)
-security import $CERTIFICATE_P12 -k $KEYCHAIN -P $MACOS_CERT_PASSWORD -T /usr/bin/codesign 2>&1 >/dev/null
+security import $CERTIFICATE_P12 -k $KEYCHAIN -P "" -T /usr/bin/codesign 2>&1 >/dev/null
 
 # Let's delete the file, we no longer need it
 rm $CERTIFICATE_P12
