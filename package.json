@@ -19,7 +19,19 @@
   "license": "MIT",
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "osxSign": {
+          "identity": "@env:MACOS_SIGN_IDENTITY",
+          "hardened-runtime": true,
+          "entitlements": "entitlements.plist",
+          "entitlements-inherit": "entitlements.plist",
+          "signature-flags": "library"
+        },
+        "osxNotarize": {
+          "appleId": "@env:APP_STORE_CONNECT_ID",
+          "appleIdPassword": "@env:APP_STORE_CONNECT_PASSWORD"
+        }
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",

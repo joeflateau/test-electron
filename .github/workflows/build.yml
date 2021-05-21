@@ -14,5 +14,8 @@ jobs:
           node-version: 14
       - name: install dependencies
         run: yarn install
+      - name: decode macos cert
+        run: ./scripts/decode-macos-cert.sh
+        if: matrix.os == 'macOS-latest'
       - name: build
         run: yarn make
