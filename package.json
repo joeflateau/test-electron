@@ -21,14 +21,14 @@
     "forge": {
       "packagerConfig": {
         "osxSign": {
-          "identity": "@env:MACOS_SIGN_IDENTITY",
+          "identity": "Developer ID Application: Upstoric LLC (5A46AL2PS3)",
           "hardened-runtime": true,
           "entitlements": "entitlements.plist",
           "entitlements-inherit": "entitlements.plist",
           "signature-flags": "library"
         },
         "osxNotarize": {
-          "appleId": "@env:APP_STORE_CONNECT_ID",
+          "appleId": "joe@upstoric.com",
           "appleIdPassword": "@env:APP_STORE_CONNECT_PASSWORD"
         }
       },

@@ -21,7 +21,5 @@ jobs:
         run: yarn install
       - name: build
         run: yarn make
-        env:
-          MACOS_SIGN_IDENTITY: ${{ secrets.MACOS_SIGN_IDENTITY }}
           APP_STORE_CONNECT_ID: ${{ secrets.APP_STORE_CONNECT_ID }}
           APP_STORE_CONNECT_PASSWORD: ${{ secrets.APP_STORE_CONNECT_PASSWORD }}
