@@ -19,8 +19,13 @@ jobs:
         run: yarn install
       - name: decode macos cert
         run: ./scripts/decode-macos-cert.sh
+        env:
+          MACOS_CERT_P12: ${{ secrets.MACOS_CERT_P12 }}
         if: matrix.os == 'macOS-latest'
       - name: publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MACOS_SIGN_IDENTITY: ${{ secrets.MACOS_SIGN_IDENTITY }}
+          APP_STORE_CONNECT_ID: ${{ secrets.APP_STORE_CONNECT_ID }}
+          APP_STORE_CONNECT_PASSWORD: ${{ secrets.APP_STORE_CONNECT_PASSWORD }}
         run: yarn run publish

@@ -16,6 +16,7 @@ jobs:
         run: yarn install
       - name: decode macos cert
         run: ./scripts/decode-macos-cert.sh
+        env:
           MACOS_CERT_P12: ${{ secrets.MACOS_CERT_P12 }}
         if: matrix.os == 'macOS-latest'
       - name: build
