@@ -20,6 +20,7 @@ module.exports = {
         name: "test_electron",
         certificateFile: "./cert.p12",
         certificatePassword: process.env.WINDOWS_CERT_PASSWORD,
+        signWithParams: "/t http://timestamp.digicert.com",
       },
     },
     {
