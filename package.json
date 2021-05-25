@@ -1,7 +1,7 @@
 {
   "name": "test-electron",
   "productName": "test-electron",
-  "version": "0.0.0-alpha1",
+  "version": "0.0.0-alpha2",
   "description": "My Electron application description",
   "main": ".webpack/main",
   "scripts": {
