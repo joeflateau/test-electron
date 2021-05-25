@@ -37,7 +37,9 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "test_electron"
+            "name": "test_electron",
+            "certificateFile": "./cert.p12",
+            "certificatePassword": ""
           }
         },
         {
