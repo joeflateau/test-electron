@@ -12,16 +12,27 @@ jobs:
         os: [windows-latest, macOS-latest]
     steps:
       - uses: actions/checkout@v2
+
       - uses: actions/setup-node@master
         with:
           node-version: 14
+
+      - name: decode windows cert
+        run: ./scripts/decode-windows-cert.sh
+        env:
+          WINDOWS_CERT_P12: ${{ secrets.WINDOWS_CERT_P12 }}
+        if: matrix.os == 'windows-latest'
+        shell: bash
+
       - name: decode macos cert
         run: ./scripts/decode-macos-cert.sh
         env:
           MACOS_CERT_P12: ${{ secrets.MACOS_CERT_P12 }}
         if: matrix.os == 'macOS-latest'
+
       - name: install dependencies
         run: yarn install
+
       - name: publish
         run: yarn run publish
         env:
