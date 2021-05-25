@@ -39,7 +39,7 @@
           "config": {
             "name": "test_electron",
             "certificateFile": "./invalid-test.p12",
-            "certificatePassword": ""
+            "certificatePassword": "test"
           }
         },
         {
