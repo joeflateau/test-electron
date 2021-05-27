@@ -47,6 +47,7 @@
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
+    "electron-unhandled": "^3.0.2",
     "node-media-server": "^2.2.6",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

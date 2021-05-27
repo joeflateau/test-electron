@@ -1,7 +1,10 @@
 import { ipcRenderer } from "electron";
+import unhandled from "electron-unhandled";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
+
+unhandled();
 
 function App() {
   const [count, setCount] = useState(0);
