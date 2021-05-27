@@ -53,7 +53,7 @@ module.exports = {
           owner: "joeflateau",
           name: "test-electron",
         },
-        prerelease: true,
+        prerelease: false,
         draft: false,
       },
     },
