@@ -60,6 +60,9 @@ app.whenReady().then(() => {
   app.on("second-instance", () => {
     menubar.showWindow();
   });
+  menubar.on("after-create-window", async () => {
+    app.dock?.hide();
+  });
 });
 
 // In this file you can include the rest of your app's specific main process
