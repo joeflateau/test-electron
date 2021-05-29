@@ -30,7 +30,7 @@ app.whenReady().then(() => {
     openAtLogin: true,
     openAsHidden: true,
   });
-  const trayIconPath = __dirname + "/assets/img/icon.png";
+  const trayIconPath = __dirname + "/assets/img/IconTemplate.png";
   const tray = new Tray(trayIconPath);
   const menu = Menu.buildFromTemplate([
     { label: "Quit", click: () => app.quit() },
