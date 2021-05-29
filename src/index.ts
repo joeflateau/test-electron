@@ -17,6 +17,12 @@ if (require("electron-squirrel-startup")) {
   app.quit();
 }
 
+const isFirstInstance = app.requestSingleInstanceLock();
+
+if (!isFirstInstance) {
+  app.quit();
+}
+
 updateElectronApp();
 
 app.whenReady().then(() => {
@@ -47,6 +53,9 @@ app.whenReady().then(() => {
     if (!app.getLoginItemSettings().wasOpenedAsHidden) {
       menubar.showWindow();
     }
+  });
+  app.on("second-instance", () => {
+    menubar.showWindow();
   });
 });
 
