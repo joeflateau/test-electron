@@ -32,7 +32,9 @@ app.whenReady().then(() => {
   });
   const trayIconPath = __dirname + "/assets/img/icon.png";
   const tray = new Tray(trayIconPath);
-  const menu = Menu.buildFromTemplate([{ label: "Test 123" }]);
+  const menu = Menu.buildFromTemplate([
+    { label: "Quit", click: () => app.quit() },
+  ]);
   tray.on("right-click", () => {
     tray.popUpContextMenu(menu);
   });
@@ -41,6 +43,7 @@ app.whenReady().then(() => {
     tray,
     index: MAIN_WINDOW_WEBPACK_ENTRY,
     preloadWindow: true,
+    showDockIcon: false,
     browserWindow: {
       webPreferences: {
         nodeIntegration: true,
