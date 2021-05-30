@@ -23,7 +23,9 @@ if (!isFirstInstance) {
   app.quit();
 }
 
-updateElectronApp();
+if (process.env.UPDATE_ELECTRON_APP !== "0") {
+  updateElectronApp();
+}
 
 app.whenReady().then(() => {
   app.setLoginItemSettings({
@@ -42,8 +44,6 @@ app.whenReady().then(() => {
   const menubar = Menubar({
     tray,
     index: MAIN_WINDOW_WEBPACK_ENTRY,
-    preloadWindow: true,
-    showDockIcon: false,
     browserWindow: {
       webPreferences: {
         nodeIntegration: true,
@@ -52,9 +52,11 @@ app.whenReady().then(() => {
       },
     },
   });
-  menubar.on("ready", async () => {
+  menubar.on("ready", () => {
     if (!app.getLoginItemSettings().wasOpenedAsHidden) {
-      menubar.showWindow();
+      setTimeout(() => {
+        menubar.showWindow();
+      }, 1250);
     }
   });
   app.on("second-instance", () => {
@@ -62,6 +64,7 @@ app.whenReady().then(() => {
   });
   menubar.on("after-create-window", async () => {
     app.dock?.hide();
+    menubar.showWindow();
   });
 });
 

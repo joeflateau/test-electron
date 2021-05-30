@@ -8,6 +8,7 @@
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
+    "make-and-run": "electron-forge make; UPDATE_ELECTRON_APP=0 ./out/test-electron-darwin-x64/test-electron.app/Contents/MacOS/test-electron",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts ."
   },
