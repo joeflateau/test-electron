@@ -1,6 +1,4 @@
-@import "../node_modules/bootstrap/scss/bootstrap-grid";
-@import "../node_modules/bootstrap/scss/utilities/sizing";
-@import "../node_modules/bootstrap/scss/utilities/borders";
+@import "../node_modules/bootstrap/scss/bootstrap";
 
 html,
 body,
@@ -19,12 +17,4 @@ body {
 .update-available {
   background-color: #232323;
   color: #fff;
-
-  button {
-    appearance: none;
-    border: 1px solid;
-    color: rgb(8, 201, 8);
-    background-color: rgb(0, 41, 0);
-    border-radius: 0.5rem;
-  }
 }

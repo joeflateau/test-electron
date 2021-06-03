@@ -24,15 +24,19 @@ function App() {
       <div className="flex-grow-1 p-3">
         <h1 className="mt-1 mb-3">💖 Hello World!</h1>
         <p>Welcome to your React Electron application.</p>
-        <button onClick={() => setCount(count + 1)}>{count}</button>
-        <p>{version}</p>
+        <button className="btn btn-primary" onClick={() => setCount(count + 1)}>
+          {count}
+        </button>
       </div>
-      <div className="update-available d-flex flex-align-center p-3">
+      <div className="update-available d-flex align-items-center p-3">
         {updateAvailable ? (
           <>
-            <div>An update ({updateAvailable.name}) is available</div>
+            <div>
+              <div className="small text-muted font-italic">{version}</div>
+              <div>An update ({updateAvailable.name}) is available</div>
+            </div>
             <button
-              className="ml-auto"
+              className="ml-auto btn btn-sm btn-primary"
               onClick={() => updateAvailable.applyUpdate()}
             >
               Update Now
@@ -40,8 +44,14 @@ function App() {
           </>
         ) : (
           <>
-            <div>No updates available</div>
-            <button className="ml-auto" onClick={() => checkForUpdate()}>
+            <div>
+              <div className="small text-muted font-italic">{version}</div>
+              <div>No updates available</div>
+            </div>
+            <button
+              className="ml-auto btn btn-sm btn-secondary"
+              onClick={() => checkForUpdate()}
+            >
               Check Now
             </button>
           </>
