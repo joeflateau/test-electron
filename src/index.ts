@@ -1,5 +1,8 @@
-import { app, ipcMain, Menu, Tray } from "electron";
+import cors from "cors";
+import { app, Menu, Tray } from "electron";
 import unhandled from "electron-unhandled";
+import express from "express";
+import getPort from "get-port";
 import { menubar as Menubar } from "menubar";
 import NodeMediaServer from "node-media-server";
 import updateElectronApp from "update-electron-app";
@@ -27,13 +30,28 @@ if (process.env.UPDATE_ELECTRON_APP !== "0") {
   updateElectronApp();
 }
 
-app.whenReady().then(() => {
+const server = express();
+
+server.use(cors());
+
+server.get("/info/version", (req, res) => {
+  res.send(app.getVersion());
+});
+
+app.whenReady().then(async () => {
+  const port = await getPort();
+
+  await new Promise<void>((resolve, reject) => {
+    server.on("error", (err) => reject(err)).listen(port, () => resolve());
+  });
+
   app.setLoginItemSettings({
     openAtLogin: true,
     openAsHidden: true,
   });
   const trayIconPath = __dirname + "/assets/img/IconTemplate.png";
   const tray = new Tray(trayIconPath);
+
   const menu = Menu.buildFromTemplate([
     { label: "Quit", click: () => app.quit() },
   ]);
@@ -49,6 +67,7 @@ app.whenReady().then(() => {
         nodeIntegration: true,
         contextIsolation: false,
         enableRemoteModule: true,
+        additionalArguments: [`--port`, String(port)],
       },
     },
   });
@@ -70,10 +89,6 @@ app.whenReady().then(() => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-
-ipcMain.on("getVersion", (ev) => {
-  ev.reply("getVersion-reply", app.getVersion());
-});
 
 const nms = new NodeMediaServer({
   rtmp: {

@@ -1,18 +1,21 @@
-import { ipcRenderer } from "electron";
 import unhandled from "electron-unhandled";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
+import { client } from "./lib/client";
 
 unhandled();
 
 function App() {
   const [count, setCount] = useState(0);
   const [version, setVersion] = useState("");
+
   useEffect(() => {
-    ipcRenderer.on("getVersion-reply", (ev, v) => setVersion(v));
-    ipcRenderer.send("getVersion");
+    client(`/info/version`)
+      .then((r) => r.text())
+      .then((r) => setVersion(r));
   }, []);
+
   return (
     <>
       <h1>💖 Hello World!</h1>
