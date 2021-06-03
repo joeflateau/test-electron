@@ -6,7 +6,10 @@ export type UpdateAvailable = {
   applyUpdate: () => void;
 } | null;
 
-export function useUpdateApplication(): { updateAvailable: UpdateAvailable } {
+export function useUpdateApplication(): {
+  updateAvailable: UpdateAvailable;
+  checkForUpdate: () => void;
+} {
   const [updateAvailable, setUpdateAvailable] = useState<UpdateAvailable>(null);
 
   useEffect(() => {
@@ -34,5 +37,10 @@ export function useUpdateApplication(): { updateAvailable: UpdateAvailable } {
     };
   }, []);
 
-  return { updateAvailable };
+  return {
+    updateAvailable,
+    checkForUpdate() {
+      client(`/info/update/check`, { method: "post" });
+    },
+  };
 }

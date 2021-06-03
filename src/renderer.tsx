@@ -17,7 +17,7 @@ function App() {
       .then((r) => setVersion(r));
   }, []);
 
-  const { updateAvailable } = useUpdateApplication();
+  const { updateAvailable, checkForUpdate } = useUpdateApplication();
 
   return (
     <div className="h-100 d-flex flex-column">
@@ -27,17 +27,26 @@ function App() {
         <button onClick={() => setCount(count + 1)}>{count}</button>
         <p>{version}</p>
       </div>
-      {updateAvailable ? (
-        <div className="update-available d-flex flex-align-center p-3">
-          <div>An update ({updateAvailable.name}) is available</div>
-          <button
-            className="ml-auto"
-            onClick={() => updateAvailable.applyUpdate()}
-          >
-            Update Now
-          </button>
-        </div>
-      ) : null}
+      <div className="update-available d-flex flex-align-center p-3">
+        {updateAvailable ? (
+          <>
+            <div>An update ({updateAvailable.name}) is available</div>
+            <button
+              className="ml-auto"
+              onClick={() => updateAvailable.applyUpdate()}
+            >
+              Update Now
+            </button>
+          </>
+        ) : (
+          <>
+            <div>No updates available</div>
+            <button className="ml-auto" onClick={() => checkForUpdate()}>
+              Check Now
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 }

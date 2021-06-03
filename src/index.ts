@@ -164,6 +164,10 @@ function UpdateRouter() {
   updateRouter.route("/").get((_req, res) => {
     res.json(versionDownloaded);
   });
+  updateRouter.route("/check").post((_req, res) => {
+    autoUpdater.checkForUpdates();
+    res.send();
+  });
   updateRouter.route("/install").post((_req, res) => {
     autoUpdater.quitAndInstall();
     res.send();
