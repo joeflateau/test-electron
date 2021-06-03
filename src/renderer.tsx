@@ -1,15 +1,15 @@
 import unhandled from "electron-unhandled";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
+import "./index.scss";
 import { client } from "./lib/client";
+import { useUpdateApplication } from "./lib/useUpdateApplication";
 
 unhandled();
 
 function App() {
   const [count, setCount] = useState(0);
   const [version, setVersion] = useState("");
-  const [updateAvailable, setUpdateAvailable] = useState(false);
 
   useEffect(() => {
     client(`/info/version`)
@@ -17,34 +17,28 @@ function App() {
       .then((r) => setVersion(r));
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      client(`/info/update-downloaded`)
-        .then((r) => r.json())
-        .then((r) => setUpdateAvailable(r?.name));
-    }, 10 * 1000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-
-  function applyUpdate() {
-    client(`/info/update-downloaded/install`, { method: "post" });
-  }
+  const { updateAvailable } = useUpdateApplication();
 
   return (
-    <>
-      <h1>💖 Hello World!</h1>
-      <p>Welcome to your React Electron application.</p>
-      <button onClick={() => setCount(count + 1)}>{count}</button>
-      <p>{version}</p>
+    <div className="h-100 d-flex flex-column">
+      <div className="flex-grow-1 p-3">
+        <h1 className="mt-1 mb-3">💖 Hello World!</h1>
+        <p>Welcome to your React Electron application.</p>
+        <button onClick={() => setCount(count + 1)}>{count}</button>
+        <p>{version}</p>
+      </div>
       {updateAvailable ? (
-        <div>
-          <div>An update ({updateAvailable}) is available</div>
-          <button onClick={() => applyUpdate()}>Update Now</button>
+        <div className="update-available d-flex flex-align-center p-3">
+          <div>An update ({updateAvailable.name}) is available</div>
+          <button
+            className="ml-auto"
+            onClick={() => updateAvailable.applyUpdate()}
+          >
+            Update Now
+          </button>
         </div>
       ) : null}
-    </>
+    </div>
   );
 }
 

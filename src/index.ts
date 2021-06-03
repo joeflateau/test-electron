@@ -1,7 +1,7 @@
 import cors from "cors";
 import { app, autoUpdater, Menu, Tray } from "electron";
 import unhandled from "electron-unhandled";
-import express from "express";
+import express, { Router } from "express";
 import getPort from "get-port";
 import { menubar as Menubar } from "menubar";
 import NodeMediaServer from "node-media-server";
@@ -26,11 +26,6 @@ if (!isFirstInstance) {
   app.quit();
 }
 
-let versionDownloaded: { name: string } | null = null;
-autoUpdater.on("update-downloaded", (_event, _notes, name) => {
-  versionDownloaded = { name };
-});
-
 if (process.env.UPDATE_ELECTRON_APP !== "0") {
   updateElectronApp({
     notifyUser: false,
@@ -41,18 +36,12 @@ const server = express();
 
 server.use(cors());
 
-server.get("/info/version", (req, res) => {
+server.get("/info/version", (_req, res) => {
   res.send(app.getVersion());
 });
 
-server.get("/info/update-downloaded", (req, res) => {
-  res.json(versionDownloaded);
-});
-
-server.post("/info/update-downloaded/install", (req, res) => {
-  autoUpdater.quitAndInstall();
-  res.send();
-});
+const updateRouter = UpdateRouter();
+server.use("/info/update", updateRouter);
 
 app.whenReady().then(async () => {
   const port = await getPort();
@@ -163,3 +152,22 @@ nms.on("donePublish", (id, streamPath, args) => {
     `id=${id} StreamPath=${streamPath} args=${JSON.stringify(args)}`
   );
 });
+
+function UpdateRouter() {
+  let versionDownloaded: { name: string } | null = null;
+
+  autoUpdater.on("update-downloaded", (_event, _notes, name) => {
+    versionDownloaded = { name };
+  });
+
+  const updateRouter = Router();
+  updateRouter.route("/").get((_req, res) => {
+    res.json(versionDownloaded);
+  });
+  updateRouter.route("/install").post((_req, res) => {
+    autoUpdater.quitAndInstall();
+    res.send();
+  });
+
+  return updateRouter;
+}
