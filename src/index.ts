@@ -1,5 +1,5 @@
 import cors from "cors";
-import { app, Menu, Tray } from "electron";
+import { app, autoUpdater, Menu, Tray } from "electron";
 import unhandled from "electron-unhandled";
 import express from "express";
 import getPort from "get-port";
@@ -26,8 +26,15 @@ if (!isFirstInstance) {
   app.quit();
 }
 
+let versionDownloaded: { name: string } | null = null;
+autoUpdater.on("update-downloaded", (_event, _notes, name) => {
+  versionDownloaded = { name };
+});
+
 if (process.env.UPDATE_ELECTRON_APP !== "0") {
-  updateElectronApp();
+  updateElectronApp({
+    notifyUser: false,
+  });
 }
 
 const server = express();
@@ -36,6 +43,15 @@ server.use(cors());
 
 server.get("/info/version", (req, res) => {
   res.send(app.getVersion());
+});
+
+server.get("/info/update-downloaded", (req, res) => {
+  res.json(versionDownloaded);
+});
+
+server.post("/info/update-downloaded/install", (req, res) => {
+  autoUpdater.quitAndInstall();
+  res.send();
 });
 
 app.whenReady().then(async () => {

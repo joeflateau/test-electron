@@ -5,7 +5,7 @@
   "description": "My Electron application description",
   "main": ".webpack/main",
   "scripts": {
-    "start": "electron-forge start",
+    "start": "UPDATE_ELECTRON_APP=0 electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "make-and-run": "electron-forge make; UPDATE_ELECTRON_APP=0 ./out/test-electron-darwin-x64/test-electron.app/Contents/MacOS/test-electron",
