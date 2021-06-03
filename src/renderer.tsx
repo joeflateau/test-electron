@@ -22,7 +22,7 @@ function App() {
       client(`/info/update-downloaded`)
         .then((r) => r.json())
         .then((r) => setUpdateAvailable(r?.name));
-    }, 1000);
+    }, 10 * 1000);
     return () => {
       clearInterval(interval);
     };
