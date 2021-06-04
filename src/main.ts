@@ -173,22 +173,23 @@ function UpdateRouter() {
       }
 
       function handleError(event: Error) {
-        reject(event);
         removeListeners();
+        reject(event);
       }
 
       function handleEvent(event: Electron.Event) {
-        resolve(event.type === "update-downloaded");
         removeListeners();
+        resolve(event.type === "update-downloaded");
       }
 
-      autoUpdater.on("error", handleError);
-      autoUpdater.on("update-downloaded", handleEvent);
-      autoUpdater.on("update-not-available", handleEvent);
-
-      if (!autoUpdater.getFeedURL()) {
+      if (versionDownloaded) {
+        resolve(true);
+      } else if (!autoUpdater.getFeedURL()) {
         resolve(false);
       } else {
+        autoUpdater.on("error", handleError);
+        autoUpdater.on("update-downloaded", handleEvent);
+        autoUpdater.on("update-not-available", handleEvent);
         autoUpdater.checkForUpdates();
       }
     }).then(
