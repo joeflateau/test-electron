@@ -14,26 +14,22 @@ export function useUpdateApplication(): {
   const [updateAvailable, setUpdateAvailable] = useState<UpdateAvailable>(null);
   const [checkingForUpdate, setCheckingForUpdate] = useState(false);
 
+  async function checkForUpdate() {
+    await client<{ name: string } | null>(`/info/update`).then((r) => {
+      setUpdateAvailable(
+        r && {
+          ...r,
+          applyUpdate() {
+            client(`/info/update/install`, { method: "post" });
+          },
+        }
+      );
+    });
+  }
+
   useEffect(() => {
     const interval = setInterval(checkForUpdate, 10 * 1000);
     checkForUpdate();
-
-    function checkForUpdate() {
-      client(`/info/update`)
-        .then((r) => r.json())
-        .then((r: { name: string } | null) => {
-          if (r) {
-            clearInterval(interval);
-            setUpdateAvailable({
-              ...r,
-              applyUpdate() {
-                client(`/info/update/install`, { method: "post" });
-              },
-            });
-          }
-        });
-    }
-
     return () => {
       clearInterval(interval);
     };
@@ -44,10 +40,15 @@ export function useUpdateApplication(): {
     checkingForUpdate,
     async checkForUpdate() {
       setCheckingForUpdate(true);
-      const { downloadedUpdate } = await client(`/info/update/check`, {
-        method: "post",
-      }).then((r) => r.json());
-      setUpdateAvailable(downloadedUpdate);
+      const { downloadedUpdate } = await client<{ downloadedUpdate: boolean }>(
+        `/info/update/check`,
+        {
+          method: "post",
+        }
+      );
+      if (downloadedUpdate) {
+        await checkForUpdate();
+      }
       setCheckingForUpdate(false);
     },
   };

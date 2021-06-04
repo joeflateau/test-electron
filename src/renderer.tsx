@@ -12,9 +12,7 @@ function App() {
   const [version, setVersion] = useState("");
 
   useEffect(() => {
-    client(`/info/version`)
-      .then((r) => r.text())
-      .then((r) => setVersion(r));
+    client<{ name: string }>(`/info/version`).then((r) => setVersion(r.name));
   }, []);
 
   const { updateAvailable, checkingForUpdate, checkForUpdate } =

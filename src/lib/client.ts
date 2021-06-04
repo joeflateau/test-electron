@@ -1,7 +1,8 @@
 function Client() {
   const port = process.argv.find((_value, i, argv) => argv[i - 1] === "--port");
-  return (path: string, init?: RequestInit) => {
-    return fetch(`http://localhost:${port}${path}`, init);
+  return async <T>(path: string, init?: RequestInit) => {
+    const r = await fetch(`http://localhost:${port}${path}`, init);
+    return (await r.json()) as T;
   };
 }
 

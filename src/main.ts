@@ -37,7 +37,7 @@ const server = express();
 server.use(cors());
 
 server.get("/info/version", (_req, res) => {
-  res.send(app.getVersion());
+  res.json({ name: app.getVersion() });
 });
 
 const updateRouter = UpdateRouter();
