@@ -20,14 +20,21 @@ function App() {
 
   return (
     <div className="h-100 d-flex flex-column">
-      <div className="flex-grow-1 p-3">
-        <h1 className="mt-1 mb-3">💖 Hello World!</h1>
-        <p>Welcome to your React Electron application.</p>
-        <button className="btn btn-primary" onClick={() => setCount(count + 1)}>
-          {count}
-        </button>
+      <div className="flex-grow-1">
+        <div className="navbar navbar-dark bg-dark text-white p-3">
+          <h1 className="m-0 navbar-brand">💖 Hello World!</h1>
+        </div>
+        <div className="p-3">
+          <p>Welcome to your React Electron application.</p>
+          <button
+            className="btn btn-primary"
+            onClick={() => setCount(count + 1)}
+          >
+            {count}
+          </button>
+        </div>
       </div>
-      <div className="update-available d-flex align-items-center p-3">
+      <div className="d-flex align-items-center p-3 bg-dark text-white">
         {updateAvailable ? (
           <>
             <div>
