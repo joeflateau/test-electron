@@ -40,15 +40,10 @@ export function useUpdateApplication(): {
     checkingForUpdate,
     async checkForUpdate() {
       setCheckingForUpdate(true);
-      const { downloadedUpdate } = await client<{ downloadedUpdate: boolean }>(
-        `/info/update/check`,
-        {
-          method: "post",
-        }
-      );
-      if (downloadedUpdate) {
-        await checkForUpdate();
-      }
+      await client<{ downloadedUpdate: boolean }>(`/info/update/check`, {
+        method: "post",
+      });
+      await checkForUpdate();
       setCheckingForUpdate(false);
     },
   };

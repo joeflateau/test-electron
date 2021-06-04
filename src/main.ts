@@ -168,8 +168,8 @@ function UpdateRouter() {
     new Promise<boolean>((resolve, reject) => {
       function removeListeners() {
         autoUpdater.off("error", handleError);
-        autoUpdater.off("update-downloaded", handleEvent);
-        autoUpdater.off("update-not-available", handleEvent);
+        autoUpdater.off("update-downloaded", handleDownloadedEvent);
+        autoUpdater.off("update-not-available", handleNotAvailableEvent);
       }
 
       function handleError(event: Error) {
@@ -177,9 +177,14 @@ function UpdateRouter() {
         reject(event);
       }
 
-      function handleEvent(event: Electron.Event) {
+      function handleDownloadedEvent() {
         removeListeners();
-        resolve(event.type === "update-downloaded");
+        resolve(true);
+      }
+
+      function handleNotAvailableEvent() {
+        removeListeners();
+        resolve(false);
       }
 
       if (versionDownloaded) {
@@ -188,8 +193,8 @@ function UpdateRouter() {
         resolve(false);
       } else {
         autoUpdater.on("error", handleError);
-        autoUpdater.on("update-downloaded", handleEvent);
-        autoUpdater.on("update-not-available", handleEvent);
+        autoUpdater.on("update-downloaded", handleDownloadedEvent);
+        autoUpdater.on("update-not-available", handleNotAvailableEvent);
         autoUpdater.checkForUpdates();
       }
     }).then(
