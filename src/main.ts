@@ -165,8 +165,36 @@ function UpdateRouter() {
     res.json(versionDownloaded);
   });
   updateRouter.route("/check").post((_req, res) => {
-    autoUpdater.checkForUpdates();
-    res.send();
+    new Promise<boolean>((resolve, reject) => {
+      function removeListeners() {
+        autoUpdater.off("error", handleError);
+        autoUpdater.off("update-downloaded", handleEvent);
+        autoUpdater.off("update-not-available", handleEvent);
+      }
+
+      function handleError(event: Error) {
+        reject(event);
+        removeListeners();
+      }
+
+      function handleEvent(event: Electron.Event) {
+        resolve(event.type === "update-downloaded");
+        removeListeners();
+      }
+
+      autoUpdater.on("error", handleError);
+      autoUpdater.on("update-downloaded", handleEvent);
+      autoUpdater.on("update-not-available", handleEvent);
+
+      if (!autoUpdater.getFeedURL()) {
+        resolve(false);
+      } else {
+        autoUpdater.checkForUpdates();
+      }
+    }).then(
+      (downloadedUpdate) => res.json({ downloadedUpdate }),
+      (err) => res.status(400).json({ err })
+    );
   });
   updateRouter.route("/install").post((_req, res) => {
     autoUpdater.quitAndInstall();

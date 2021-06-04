@@ -4,4 +4,5 @@ function Client() {
     return fetch(`http://localhost:${port}${path}`, init);
   };
 }
+
 export const client = Client();

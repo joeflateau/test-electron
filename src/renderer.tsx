@@ -17,7 +17,8 @@ function App() {
       .then((r) => setVersion(r));
   }, []);
 
-  const { updateAvailable, checkForUpdate } = useUpdateApplication();
+  const { updateAvailable, checkingForUpdate, checkForUpdate } =
+    useUpdateApplication();
 
   return (
     <div className="h-100 d-flex flex-column">
@@ -36,7 +37,7 @@ function App() {
               <div>An update ({updateAvailable.name}) is available</div>
             </div>
             <button
-              className="ml-auto btn btn-sm btn-primary"
+              className="ml-auto btn btn-sm btn-info"
               onClick={() => updateAvailable.applyUpdate()}
             >
               Update Now
@@ -51,7 +52,15 @@ function App() {
             <button
               className="ml-auto btn btn-sm btn-secondary"
               onClick={() => checkForUpdate()}
+              disabled={checkingForUpdate}
             >
+              {checkingForUpdate ? (
+                <span
+                  className="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+              ) : null}
               Check Now
             </button>
           </>

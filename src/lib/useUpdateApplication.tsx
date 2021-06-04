@@ -8,9 +8,11 @@ export type UpdateAvailable = {
 
 export function useUpdateApplication(): {
   updateAvailable: UpdateAvailable;
+  checkingForUpdate: boolean;
   checkForUpdate: () => void;
 } {
   const [updateAvailable, setUpdateAvailable] = useState<UpdateAvailable>(null);
+  const [checkingForUpdate, setCheckingForUpdate] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(checkForUpdate, 10 * 1000);
@@ -39,8 +41,14 @@ export function useUpdateApplication(): {
 
   return {
     updateAvailable,
-    checkForUpdate() {
-      client(`/info/update/check`, { method: "post" });
+    checkingForUpdate,
+    async checkForUpdate() {
+      setCheckingForUpdate(true);
+      const { downloadedUpdate } = await client(`/info/update/check`, {
+        method: "post",
+      }).then((r) => r.json());
+      setUpdateAvailable(downloadedUpdate);
+      setCheckingForUpdate(false);
     },
   };
 }
