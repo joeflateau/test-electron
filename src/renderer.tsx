@@ -21,7 +21,7 @@ function App() {
   return (
     <div className="h-100 d-flex flex-column">
       <div className="flex-grow-1">
-        <div className="navbar navbar-dark bg-dark text-white p-3">
+        <div className="navbar navbar-dark bg-dark text-white px-3 py-1">
           <h1 className="m-0 navbar-brand">💖 Hello World!</h1>
         </div>
         <div className="p-3">
@@ -34,7 +34,7 @@ function App() {
           </button>
         </div>
       </div>
-      <div className="d-flex align-items-center p-3 bg-dark text-white">
+      <div className="d-flex align-items-center px-3 py-2 bg-dark text-white">
         {updateAvailable ? (
           <>
             <div>
@@ -42,7 +42,7 @@ function App() {
               <div>An update ({updateAvailable.name}) is available</div>
             </div>
             <button
-              className="ml-auto btn btn-sm btn-info"
+              className="ml-auto btn btn-sm btn-info text-nowrap"
               onClick={() => updateAvailable.applyUpdate()}
             >
               Update Now
@@ -55,7 +55,7 @@ function App() {
               <div>No updates available</div>
             </div>
             <button
-              className="ml-auto btn btn-sm btn-secondary"
+              className="ml-auto btn btn-sm btn-secondary text-nowrap"
               onClick={() => checkForUpdate()}
               disabled={checkingForUpdate}
             >
