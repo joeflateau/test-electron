@@ -1,9 +1,9 @@
 import unhandled from "electron-unhandled";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
-import "./index.scss";
-import { client } from "./lib/client";
-import { useUpdateApplication } from "./lib/useUpdateApplication";
+import "../index.scss";
+import { client } from "../lib/client";
+import { useUpdateApplication } from "../lib/useUpdateApplication";
 
 unhandled();
 

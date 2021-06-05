@@ -68,7 +68,7 @@ module.exports = {
           entryPoints: [
             {
               html: "./src/index.html",
-              js: "./src/renderer.tsx",
+              js: "./src/entrypoints/renderer.tsx",
               name: "main_window",
             },
           ],
