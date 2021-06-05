@@ -1,3 +1,5 @@
+import { faArrowToBottom } from "@fortawesome/pro-light-svg-icons";
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import unhandled from "electron-unhandled";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
@@ -45,6 +47,7 @@ function App() {
               className="ml-auto btn btn-sm btn-info text-nowrap"
               onClick={() => updateAvailable.applyUpdate()}
             >
+              <Icon icon={faArrowToBottom} />
               Update Now
             </button>
           </>
@@ -66,6 +69,7 @@ function App() {
                   aria-hidden="true"
                 ></span>
               ) : null}
+              <Icon icon={faArrowToBottom} />
               Check Now
             </button>
           </>
