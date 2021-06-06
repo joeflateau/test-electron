@@ -1,11 +1,14 @@
 import cors from "cors";
 import { app, autoUpdater, Menu, Tray } from "electron";
 import unhandled from "electron-unhandled";
-import express, { Router } from "express";
+import express from "express";
+import Router from "express-promise-router";
 import getPort from "get-port";
 import { menubar as Menubar } from "menubar";
 import NodeMediaServer from "node-media-server";
+import { resolve as resolvePath } from "path";
 import updateElectronApp from "update-electron-app";
+import { UpdateChecker } from "../lib/UpdateChecker";
 
 unhandled();
 
@@ -40,7 +43,8 @@ server.get("/info/version", (_req, res) => {
   res.json({ name: app.getVersion() });
 });
 
-const updateRouter = UpdateRouter();
+const updateChecker = new UpdateChecker();
+const updateRouter = UpdateRouter(updateChecker);
 server.use("/info/update", updateRouter);
 
 app.whenReady().then(async () => {
@@ -71,7 +75,7 @@ app.whenReady().then(async () => {
       webPreferences: {
         nodeIntegration: true,
         contextIsolation: false,
-        enableRemoteModule: true,
+        preload: resolvePath(__dirname, "preload.js"),
         additionalArguments: [`--port`, String(port)],
       },
     },
@@ -89,6 +93,9 @@ app.whenReady().then(async () => {
   menubar.on("after-create-window", async () => {
     app.dock?.hide();
     menubar.showWindow();
+    if (process.env.SHOW_DEV_TOOLS === "1") {
+      menubar.window?.webContents.openDevTools();
+    }
   });
 });
 
@@ -153,54 +160,15 @@ nms.on("donePublish", (id, streamPath, args) => {
   );
 });
 
-function UpdateRouter() {
-  let versionDownloaded: { name: string } | null = null;
-
-  autoUpdater.on("update-downloaded", (_event, _notes, name) => {
-    versionDownloaded = { name };
-  });
-
+function UpdateRouter(updateChecker: UpdateChecker) {
   const updateRouter = Router();
+
   updateRouter.route("/").get((_req, res) => {
-    res.json(versionDownloaded);
+    res.json(updateChecker.downloadedVersion);
   });
-  updateRouter.route("/check").post((_req, res) => {
-    new Promise<boolean>((resolve, reject) => {
-      function removeListeners() {
-        autoUpdater.off("error", handleError);
-        autoUpdater.off("update-downloaded", handleDownloadedEvent);
-        autoUpdater.off("update-not-available", handleNotAvailableEvent);
-      }
-
-      function handleError(event: Error) {
-        removeListeners();
-        reject(event);
-      }
-
-      function handleDownloadedEvent() {
-        removeListeners();
-        resolve(true);
-      }
-
-      function handleNotAvailableEvent() {
-        removeListeners();
-        resolve(false);
-      }
-
-      if (versionDownloaded) {
-        resolve(true);
-      } else if (!autoUpdater.getFeedURL()) {
-        resolve(false);
-      } else {
-        autoUpdater.on("error", handleError);
-        autoUpdater.on("update-downloaded", handleDownloadedEvent);
-        autoUpdater.on("update-not-available", handleNotAvailableEvent);
-        autoUpdater.checkForUpdates();
-      }
-    }).then(
-      (downloadedUpdate) => res.json({ downloadedUpdate }),
-      (err) => res.status(400).json({ err })
-    );
+  updateRouter.route("/check").post(async (_req, res) => {
+    const downloadedUpdate = await updateChecker.checkUpdateAsync();
+    res.json({ downloadedUpdate });
   });
   updateRouter.route("/install").post((_req, res) => {
     autoUpdater.quitAndInstall();

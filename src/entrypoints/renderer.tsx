@@ -1,13 +1,10 @@
 import { faArrowToBottom } from "@fortawesome/pro-light-svg-icons";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import unhandled from "electron-unhandled";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import "../index.scss";
 import { client } from "../lib/client";
 import { useUpdateApplication } from "../lib/useUpdateApplication";
-
-unhandled();
 
 function App() {
   const [count, setCount] = useState(0);
