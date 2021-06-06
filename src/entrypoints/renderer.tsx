@@ -1,10 +1,16 @@
+import { faSpinnerThird } from "@fortawesome/pro-duotone-svg-icons";
 import { faArrowToBottom } from "@fortawesome/pro-light-svg-icons";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import Tippy, { TippyProps } from "@tippyjs/react";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import "../index.scss";
 import { client } from "../lib/client";
 import { useUpdateApplication } from "../lib/useUpdateApplication";
+
+const AppTippy = (props: TippyProps) => {
+  return <Tippy theme="light-border" animation="shift-away" {...props} />;
+};
 
 function App() {
   const [count, setCount] = useState(0);
@@ -22,6 +28,18 @@ function App() {
       <div className="flex-grow-1">
         <div className="navbar navbar-dark bg-dark text-white px-3 py-1">
           <h1 className="m-0 navbar-brand">💖 Hello World!</h1>
+          <div className="ml-auto">
+            {updateAvailable && (
+              <AppTippy content="An update is available, click to update now.">
+                <button
+                  className="ml-auto btn btn-sm btn-info text-nowrap"
+                  onClick={() => updateAvailable.applyUpdate()}
+                >
+                  <Icon icon={faArrowToBottom} />
+                </button>
+              </AppTippy>
+            )}
+          </div>
         </div>
         <div className="p-3">
           <p>Welcome to your React Electron application.</p>
@@ -44,7 +62,7 @@ function App() {
               className="ml-auto btn btn-sm btn-info text-nowrap"
               onClick={() => updateAvailable.applyUpdate()}
             >
-              <Icon icon={faArrowToBottom} />
+              <Icon icon={faArrowToBottom} className="mr-2" />
               Update Now
             </button>
           </>
@@ -60,13 +78,10 @@ function App() {
               disabled={checkingForUpdate}
             >
               {checkingForUpdate ? (
-                <span
-                  className="spinner-border spinner-border-sm"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-              ) : null}
-              <Icon icon={faArrowToBottom} />
+                <Icon icon={faSpinnerThird} spin={true} className="mr-2" />
+              ) : (
+                <Icon icon={faArrowToBottom} className="mr-2" />
+              )}
               Check Now
             </button>
           </>
