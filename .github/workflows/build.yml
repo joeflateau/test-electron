@@ -6,10 +6,14 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.builds.runsOn }}
     strategy:
       matrix:
-        os: [windows-latest, macOS-latest]
+        builds: 
+          - os: windows-latest
+            runsOn: [windows, self-hosted]
+          - os: macOS-latest
+            runsOn: [macOS-latest]
     steps:
       - uses: actions/checkout@v2
 
@@ -21,14 +25,14 @@ jobs:
         run: ./scripts/decode-windows-cert.sh
         env:
           WINDOWS_CERT_P12: ${{ secrets.WINDOWS_CERT_P12 }}
-        if: matrix.os == 'windows-latest'
+        if: matrix.builds.os == 'windows-latest'
         shell: bash
 
       - name: decode macos cert
         run: ./scripts/decode-macos-cert.sh
         env:
           MACOS_CERT_P12: ${{ secrets.MACOS_CERT_P12 }}
-        if: matrix.os == 'macOS-latest'
+        if: matrix.builds.os == 'macOS-latest'
 
       - name: install dependencies
         run: yarn install
