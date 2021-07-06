@@ -20,10 +20,8 @@ module.exports = {
       name: "@electron-forge/maker-squirrel",
       config: {
         name: "test_electron",
-        ...(process.env.WINDOWS_CERT_PASSWORD && {
-          certificateFile: "./cert.p12",
-          certificatePassword: process.env.WINDOWS_CERT_PASSWORD,
-          signWithParams: "/t http://timestamp.digicert.com",
+        ...(process.env.WINDOWS_CERT_CONTAINER_NAME && {
+          signWithParams: `/tr http://timestamp.digicert.com /fd sha256 /f ./cert.p12 /csp "eToken Base Cryptographic Provider" /kc "${process.env.WINDOWS_CERT_CONTAINER_NAME}"`,
         }),
         noMsi: false,
       },
