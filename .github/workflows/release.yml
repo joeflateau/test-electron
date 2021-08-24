@@ -6,10 +6,12 @@ on:
 
 jobs:
   publish:
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.runs-on }}
     strategy:
       matrix:
-        os: [windows-latest, macOS-latest]
+        include:
+          - runs-on: [macOS-latest]
+          - runs-on: [windows-latest, self-hosted]
     steps:
       - uses: actions/checkout@v2
 
