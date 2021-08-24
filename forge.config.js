@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { join: joinPath } = require("path");
+
 module.exports = {
   packagerConfig: {
     ...(process.env.APP_STORE_CONNECT_PASSWORD && {
@@ -21,7 +24,13 @@ module.exports = {
       config: {
         name: "test_electron",
         ...(process.env.WINDOWS_CERT_CONTAINER_NAME && {
-          signWithParams: `/tr http://timestamp.digicert.com /fd sha256 /f ./cert.p12 /csp "eToken Base Cryptographic Provider" /kc "${process.env.WINDOWS_CERT_CONTAINER_NAME}"`,
+          signWithParams: [
+            `/tr http://timestamp.digicert.com`,
+            `/fd sha256`,
+            `/f "${joinPath(__dirname, "cert.p12")}"`,
+            `/csp "eToken Base Cryptographic Provider"`,
+            `/kc "${process.env.WINDOWS_CERT_CONTAINER_NAME}"`,
+          ].join(" "),
         }),
         noMsi: false,
       },
